@@ -1,0 +1,103 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      setFieldsDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+//Tips and Tricks -
+/* I was having terrible trouble trying to get the 
+simulation to start without the big block of central water that Jérémie 
+had included in the first simulation. I wanted to only use the water 
+surface profile from a Flow-3D run, but the solver kept crashing. This 
+is how I fixed it:
+ I set includeCut to true, and that is it. After I could run the simulation no problem.
+*/
+
+
+defaultFieldValues
+(
+    volScalarFieldValue alpha.water 0
+);
+
+regions
+(
+   	
+    surfaceToCell
+    {
+        file "initCond.stl";
+		useSurfaceOrientation false;  // use closed surface inside/outside
+						              // test (ignores includeCut,
+						              // outsidePoints)
+		outsidePoints   ((1 0.17 0.17));    // definition of outside
+		includeCut      true;              // cells cut by surface
+		includeInside   true;              // cells not on outside of surf
+		includeOutside  true;              // cells on outside of surf
+		nearDistance    -1;                 // cells with centre near surf
+						                    // (set to -1 if not used)
+		curvature       0.9;                // cells within nearDistance
+						                    // and near surf curvature
+						                    // (set to -100 if not used)
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
+
+/*	surfaceToCell
+    {
+        file "16_39_upstream.stl";
+		useSurfaceOrientation false;  // use closed surface inside/outside
+						              // test (ignores includeCut,
+						              // outsidePoints)
+		outsidePoints   ((131 12 12));    // definition of outside
+		includeCut      true;              // cells cut by surface
+		includeInside   true;              // cells not on outside of surf
+		includeOutside  false;              // cells on outside of surf
+		nearDistance    -1;                 // cells with centre near surf
+						                    // (set to -1 if not used)
+		curvature       0.9;                // cells within nearDistance
+						                    // and near surf curvature
+						                    // (set to -100 if not used)
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }
+    
+	surfaceToCell
+    {
+        file "ws_in_pass_14092015.stl";
+		useSurfaceOrientation false;  // use closed surface inside/outside
+						              // test (ignores includeCut,
+						              // outsidePoints)
+		outsidePoints   ((131 12 12));    // definition of outside
+		includeCut      true;              // cells cut by surface
+		includeInside   true;              // cells not on outside of surf
+		includeOutside  false;              // cells on outside of surf
+		nearDistance    -1;                 // cells with centre near surf
+						                    // (set to -1 if not used)
+		curvature       0.9;                // cells within nearDistance
+						                    // and near surf curvature
+						                    // (set to -100 if not used)
+        fieldValues
+        (
+            volScalarFieldValue alpha.water 1
+        );
+    }*/
+
+);
+
+
+// ************************************************************************* //

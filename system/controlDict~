@@ -1,0 +1,198 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.1.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     simpleFoam;
+
+startFrom       latestTime;
+
+startTime       0; 
+
+stopAt          endTime;
+
+endTime         20;  
+
+deltaT          0.0005; 
+
+writeControl    adjustableRunTime;
+
+writeInterval   0.01; 
+
+purgeWrite      2; //2; 
+
+writeFormat     ascii;
+
+writePrecision  12;
+
+writeCompression compressed;
+
+timeFormat      general;
+
+timePrecision   12;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           0.8; 
+maxAlphaCo      0.5; 
+
+maxDeltaT       1;
+
+functions
+{
+	minMaxU                      //monitors the min/max of the velocity field
+	{
+	type fieldMinMax;
+	functionObjectLibs ("libfieldFunctionObjects.so");
+	fields
+	(
+	U
+	);
+	mode magnitude;
+	outputControl timeStep;
+	outputInterval 1;
+	}
+
+	forces                       //calculate forces on baffles and on pipe section holding baffles
+	{
+	type forces;
+	functionObjectLibs ("libforces.so");
+	patches (baffles PipeBaffle);
+	rhoName rhoInf;
+	pName p;
+	UName U;
+	CofR (0 0 0);
+	rhoInf 1000;
+	name forces;
+	uitype forces;
+	outputControl outputTime;
+	outputInterval 1;
+	format ascii;
+	}
+
+	flux
+        {
+        type            faceSource; //calculates flow rate through plane
+        functionObjectLibs ("libfieldFunctionObjects.so");
+        enabled         true;
+        outputControl   timeStep;
+        surfaceFormat   off;
+	sourceName Flow;
+        log             true;
+        valueOutput     true;
+        
+        source          sampledSurface;  // Type of source: patch/faceZone/sampledSurface      
+                                         // if sampledSurface: dictionary with a sampledSurface
+                                         // Note: will not sample surface fields.
+        sampledSurfaceDict
+        {           
+            type            plane;
+            basePoint       (3 0 0);
+            normalVector    (1 0 0);
+            interpolate       false;
+        }
+        operation       areaNormalIntegrate;
+        fields
+        (
+            U
+        );
+    	}
+
+
+	Upstream                         //average pressure over upstream plane
+	{
+	    type            faceSource;
+	    functionObjectLibs ("libfieldFunctionObjects.so");
+	    enabled         true;
+	    outputControl   outputTime;
+	    outputInterval 1;
+	    log             true;
+	    valueOutput     true;
+	    sourceName      upstream;
+	    source          sampledSurface;
+	    verbose true;
+	    //setFormat raw;
+	    surfaceFormat   null;
+
+	    sampledSurfaceDict
+	    {
+		type            plane;    // always triangulated
+		basePoint       (3.75 0.17 0.17);
+		normalVector    (1 0 0);
+	    }
+
+	    operation       areaAverage;
+	    fields
+	    (
+		p
+	    );
+	}
+
+	Downstream
+	{
+	    type            faceSource;
+	    functionObjectLibs ("libfieldFunctionObjects.so");
+	    enabled         true;
+	    outputControl   outputTime;
+	    outputInterval 1;
+	    log             true;
+	    valueOutput     true;
+	    sourceName      downstream;
+	    source          sampledSurface;
+	    verbose true;
+	    //setFormat raw;
+	    surfaceFormat   null;
+
+	    sampledSurfaceDict
+	    {
+		type            plane;    // always triangulated
+		basePoint       (5.44 0.17 0.17);
+		normalVector    (1 0 0);
+	    }
+
+	    operation       areaAverage;
+	    fields
+	    (
+		p
+	    );
+	}
+
+   velocityProbes
+    {
+     type probes
+     functionObjectLibs ("libsampling.dylib");
+     fields
+      (
+        U
+      );
+
+     probeLocations
+      (
+       (2 0.127 0.0)
+       (3.75 0.127 0.0)
+       (4.25 0.127 0.0)
+       (4.75 0.127 0.0)
+       (5.0 0.127 0.0)
+       (5.5 0.127 0.0)
+     );
+     }
+
+}
+
+
+
+// ************************************************************************* //

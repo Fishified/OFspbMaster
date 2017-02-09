@@ -1,0 +1,15 @@
+#!/bin/bash
+#PBS -N testOF
+#PBS -l nodes=4
+#PBS -l walltime=120:00:00
+#PBS -q qwork@mp2
+
+
+cd $PBS_O_WORKDIR
+
+# choose mpi-tasks per node *** there are 24 cores/node
+export ppn=24
+
+# start the application
+mpiexec -n $[PBS_NUM_NODES*ppn] -npernode $ppn simpleFoam -parallel >> log
+

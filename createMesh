@@ -1,0 +1,17 @@
+#! /bin/bash
+rm -r 0
+cp -r 0.orig 0
+rm -r pro*
+
+foamClearPolyMesh
+blockMesh
+decomposePar
+mpirun -np 4 snappyHexMesh -overwrite -parallel
+
+reconstructParMesh -constant
+
+rm -r pro*
+
+
+
+

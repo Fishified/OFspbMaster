@@ -1,0 +1,15 @@
+#! /bin/bash
+
+rm log
+rm -r pro*
+rm -r postProcessing
+rm -r 0
+cp -r zeroOrig 0
+decomposePar
+
+mpirun -np 4 simpleFoam -parallel #> log &
+
+
+
+
+
