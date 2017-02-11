@@ -62,11 +62,22 @@ geometry
 	name        baffles;
     }*/
 
-    baffleRefine
+    /*WB1506.stl
     {
-      type searchableBox;
-      min (3.75 0 -0.2);
-      max (5.44 0.127 0.2);
+        type        triSurfaceMesh;
+	name        baffles;
+    }*/
+
+    /*PipeBaffle.stl
+    {
+        type        triSurfaceMesh;
+	name        PipeBaffleRefine;
+    }*/
+
+    RefinementRegion.stl
+    {
+        type        triSurfaceMesh;
+	name        PipeBaffleRefine;
     }
 
 };
@@ -74,7 +85,7 @@ geometry
 castellatedMeshControls
 {
     maxLocalCells 1000000;
-    maxGlobalCells 4000000;
+    maxGlobalCells 40000000;
     minRefinementCells 0;
     maxLoadUnbalance 0.10;
     nCellsBetweenLevels 3;
@@ -96,7 +107,7 @@ castellatedMeshControls
 
         baffles
         {
-	  level (2 3);
+	  level (1 2);
         }
     }
 
@@ -104,7 +115,7 @@ castellatedMeshControls
 
     refinementRegions
     {
-       baffleRefine
+       PipeBaffleRefine
        {
          mode inside;
          levels ((0.0 0));
@@ -127,22 +138,27 @@ snapControls
 
 addLayersControls
 {
-    relativeSizes true;
+    relativeSizes false;
     layers
     {
-         pipe
+         PipeUpDown
         {
             nSurfaceLayers 2;
         }
-         baffles
+         PipeBaffle
+        {
+            nSurfaceLayers 2;
+        }
+
+       baffles
         {
             nSurfaceLayers 2;
         }
     }
 
     expansionRatio 1.0;
-    finalLayerThickness 0.5;
-    minThickness 0.5;
+    finalLayerThickness 0.007;
+    minThickness 0.007;
     nGrow 0;
     featureAngle 180;
     nRelaxIter 5;
