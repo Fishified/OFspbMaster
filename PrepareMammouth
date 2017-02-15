@@ -8,7 +8,7 @@ cd ${0%/*} || exit 1    # Run from this directory
 
 # Get application name
 application=`getApplication`
-
+rm log.*
 cp -r zeroOrig 0
 # create the mesh
 runApplication decomposePar
