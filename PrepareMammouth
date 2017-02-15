@@ -13,7 +13,6 @@ cp -r zeroOrig 0
 # create the mesh
 runApplication decomposePar
 
-rm -r pro*
 
 
 
