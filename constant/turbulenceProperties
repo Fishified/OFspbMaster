@@ -14,12 +14,12 @@ FoamFile
     object      turbulenceProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
+#include        "../modelParameters"
 simulationType  RAS;//RAS //laminar; //RASModel;
 
 RAS
 {
-    RASModel        kOmega; //kEpsilon;
+    RASModel        $turbModel; //kEpsilon;
 
     turbulence      on;
 

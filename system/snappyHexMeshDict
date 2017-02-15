@@ -14,6 +14,9 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+#include        "../modelParameters"
+//stlFile "SPB1111006.stl";
+
 castellatedMesh true;
 snap            true;
 addLayers       false;
@@ -38,41 +41,11 @@ geometry
 	name        PipeUpDown;
     }
 
-    SPB3331506.stl
+    $baffleGeometry
     {
         type        triSurfaceMesh;
 	name        baffles;
     }
-
-    /*SPB3331006.stl
-    {
-        type        triSurfaceMesh;
-	name        baffles;
-    }*/
-
-    /*SPB2121506.stl
-    {
-        type        triSurfaceMesh;
-	name        baffles;
-    }*/
-
-    /*SPB2121006.stl
-    {
-        type        triSurfaceMesh;
-	name        baffles;
-    }*/
-
-    /*WB1506.stl
-    {
-        type        triSurfaceMesh;
-	name        baffles;
-    }*/
-
-    /*PipeBaffle.stl
-    {
-        type        triSurfaceMesh;
-	name        PipeBaffleRefine;
-    }*/
 
     RefinementRegion.stl
     {

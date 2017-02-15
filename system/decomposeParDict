@@ -14,8 +14,8 @@ FoamFile
     object      decomposeParDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-numberOfSubdomains 4;
+#include        "../modelParameters"
+numberOfSubdomains $procs;
 method           scotch;
 
 hierarchicalCoeffs

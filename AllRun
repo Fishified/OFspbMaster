@@ -1,0 +1,31 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+if [ $# -eq 0 ]
+  then
+    echo "Please enter the number of processors to use"
+    exit 1
+fi
+#=========================
+procs=$1 #first argument is the number of processors to use
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+
+# Get application name
+application=`getApplication`
+rm -r 0
+rm -r pro*
+rm log.*
+cp -r zeroOrig 0
+runApplication decomposePar
+#runApplication $application
+runParallel `getApplication` $procs
+
+#
+#runApplication reconstructParMesh -constant
+#mpirun -np $procs redistributePar -reconstruct -parallel 
+##runApplication reconstructPar
+
+
+# ----------------------------------------------------------------- end-of-file
