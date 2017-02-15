@@ -8,13 +8,14 @@
 
 //geometry controls
 baffleGeometry SPB1111006.stl;
+refinementLevel 1;
 
 //field controls
 pressure           0;
 
 //turbulence controls
 turbModel kOmega;
-//turbModel KEpsilon;
+//turbModel kEpsilon;
 
 //processing controls
 procs  4;

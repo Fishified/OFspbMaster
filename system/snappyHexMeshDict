@@ -91,7 +91,7 @@ castellatedMeshControls
        PipeBaffleRefine
        {
          mode inside;
-         levels ((0.0 0));
+         levels ((0.0 $refinementLevel));
        }
     }
 
